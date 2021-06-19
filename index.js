@@ -91,6 +91,8 @@ function managerInfo (Role) {
             }
         }
     },
+    //newEmployee = new Manager(Name, ID, Email, Office, Role);
+    //teamMembers.push(newEmployee);
     //add do you want to add an engineer or intern add if so return to menu otherwise run the rest
     ])
 }
@@ -151,6 +153,8 @@ function engineerInfo (Role) {
         }
     },
     ])
+    //newEmployee = new Engineer(Name, ID, Email, Github, Role);
+    //teamMembers.push(newEmployee);
     //add add do you want to add a user, if so return to menu otherwise run the rest
 }
 
@@ -210,10 +214,13 @@ function internInfo (Role) {
         }
     },
     ])
+    //newEmployee = new Intern(Name, ID, Email, School, Role);
+    //teamMembers.push(newEmployee);
     //add add do you want to add a user, if so return to menu otherwise run the rest 
 }
 
-//generateHTML();
+//generateIndHTML (); different employee cards 
+//generateHTML(); General outlook of the page  
 
 
 function startApp() {
@@ -222,3 +229,5 @@ function startApp() {
 
 startApp()
     .then (Role => specificQuestions(Role))
+    //.then (newEmployee => generateIndHTML(newEmployee))
+    // then fs.writeFile general HTML
