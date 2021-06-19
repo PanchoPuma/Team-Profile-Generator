@@ -6,18 +6,18 @@ const fs = require("fs");
 //const Manager = require("./lib/Manager");
 const teamMembers = [];
 
-const question = [
-    
+//Role
+const Role = [
     {
         type: 'list',
         name: 'Role',
-        message: "Please select employee's role (Required)",
+        message: "Please select the employee's role (Required)",
         choices: ['Manager', 'Engineer','Intern'],
         validate: roleChoice => {
             if (roleChoice) {
                 return true;
             } else {
-                console.log("Please select employee's role (Required)");
+                console.log("Please select the employee's role (Required)");
                 return false;
             }
         }
@@ -25,20 +25,24 @@ const question = [
 
 ]
 
-function specificQuestions(Role) {
+function specificQuestions({Role}) {
+    console.log(Role);
     if (Role === "Manager") {
         managerInfo (Role);
+    }else if (Role === "Engineer") {
+        engineerInfo (Role);
+    }else if (Role === "Intern") {
+        internInfo (Role);
     }
-}
+};
 
-;
-
+// Manager Info 
 function managerInfo (Role) {
     inquirer.prompt([
     {
         type: 'input',
         name: 'Name',
-        message: "Please enter manager's name (Required)",
+        message: "Please enter the manager's name (Required)",
         validate: nameValue => {
             if (nameValue) {
                 return true;
@@ -51,12 +55,12 @@ function managerInfo (Role) {
     {
         type: 'input',
         name: 'ID',
-        message: "Please enter manager's ID (Required)",
+        message: "Please the enter manager's ID (Required)",
         validate: employeeID => {
             if (employeeID) {
                 return true;
             } else {
-                console.log("Please enter manager's ID");
+                console.log("Please the enter manager's ID");
                 return false;
             }
         }
@@ -64,12 +68,12 @@ function managerInfo (Role) {
     {
         type: 'input',
         name: 'Email',
-        message: "Please enter manager's email address (Required)",
+        message: "Please enter the  manager's email address (Required)",
         validate: email => {
             if (email) {
                 return true;
             } else {
-                console.log("Please enter manager's email address");
+                console.log("Please enter the manager's email address");
                 return false;
             }
         }
@@ -77,27 +81,144 @@ function managerInfo (Role) {
     {
         type: 'input',
         name: 'Office',
-        message: "Please enter manager's office number (Required)",
+        message: "Please enter the manager's office number (Required)",
         validate: officeN => {
             if (officeN) {
                 return true;
             } else {
-                console.log("Please enter manager's office number");
+                console.log("Please enter the manager's office number");
+                return false;
+            }
+        }
+    },
+    //add do you want to add an engineer or intern add if so return to menu otherwise run the rest
+    ])
+}
+
+// EngineerInfo 
+function engineerInfo (Role) {
+    inquirer.prompt([
+    {
+        type: 'input',
+        name: 'Name',
+        message: "Please enter the Engineer's name (Required)",
+        validate: nameValue => {
+            if (nameValue) {
+                return true;
+            } else {
+                console.log('Please enter the name of the Engineer!');
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'ID',
+        message: "Please enter the Engineer's ID (Required)",
+        validate: employeeID => {
+            if (employeeID) {
+                return true;
+            } else {
+                console.log("Please enter Engineer's ID");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'Email',
+        message: "Please enter the Engineer's email address (Required)",
+        validate: email => {
+            if (email) {
+                return true;
+            } else {
+                console.log("Please enter the Engineer's email address");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'gitHub',
+        message: "Please enter the Engineer's GitHub username (Required)",
+        validate: gitHub => {
+            if (gitHub) {
+                return true;
+            } else {
+                console.log("Please enter the Engineer's GitHub username");
                 return false;
             }
         }
     },
     ])
+    //add add do you want to add a user, if so return to menu otherwise run the rest
 }
 
-//Engineer ();
-//Intern ();
+//Intern Info
+function internInfo (Role) {
+    inquirer.prompt([
+    {
+        type: 'input',
+        name: 'Name',
+        message: "Please enter the Intern's name (Required)",
+        validate: nameValue => {
+            if (nameValue) {
+                return true;
+            } else {
+                console.log('Please enter the name of the Intern!');
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'ID',
+        message: "Please enter the Intern's ID (Required)",
+        validate: employeeID => {
+            if (employeeID) {
+                return true;
+            } else {
+                console.log("Please enter the Intern's ID");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'Email',
+        message: "Please enter the Intern's email address (Required)",
+        validate: email => {
+            if (email) {
+                return true;
+            } else {
+                console.log("Please enter the Intern's email address");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'gitHub',
+        message: "Please enter the Intern's School (Required)",
+        validate: gitHub => {
+            if (gitHub) {
+                return true;
+            } else {
+                console.log("Please enter the Intern's School");
+                return false;
+            }
+        }
+    },
+    ])
+    //add add do you want to add a user, if so return to menu otherwise run the rest 
+}
+
 //generateHTML();
 
 
 function startApp() {
-    return inquirer.prompt(question);
+    return inquirer.prompt(Role);
 };
 
 startApp()
-    .then (answer => specificQuestions(answer))
+    .then (Role => specificQuestions(Role))
