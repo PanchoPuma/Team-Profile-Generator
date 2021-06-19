@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-//const Employee = require("./lib/Employee");
+const Employee = require("./lib/Employee");
 //const Engineer = require("./lib/Engineer");
 //const Intern = require("./lib/Intern");
 //const Manager = require("./lib/Manager");
@@ -80,10 +80,10 @@ function managerInfo (Role) {
     },
     {
         type: 'input',
-        name: 'Office',
+        name: 'OfficeNu',
         message: "Please enter the manager's office number (Required)",
-        validate: officeN => {
-            if (officeN) {
+        validate: OfficeNu => {
+            if (OfficeNu) {
                 return true;
             } else {
                 console.log("Please enter the manager's office number");
@@ -202,7 +202,7 @@ function internInfo (Role) {
     },
     {
         type: 'input',
-        name: 'gitHub',
+        name: 'School',
         message: "Please enter the Intern's School (Required)",
         validate: gitHub => {
             if (gitHub) {
