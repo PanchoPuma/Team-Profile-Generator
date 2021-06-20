@@ -100,7 +100,8 @@ function roleQuestions({Name, ID, Email, Role}) {
             teamMembers.push(newteamMember)
             console.log (teamMembers)
         }
-        //generateIndHTML(newteamMember)
+        generateIndHTML(newteamMember)
+        confirmation ()
     })
     .catch(err => {
         console.log(err);
@@ -109,28 +110,25 @@ function roleQuestions({Name, ID, Email, Role}) {
 
 /// COnfirming whether 
 
-// function confirmation (){
-//     inquirer.prompt([{
-//         type: "list",
-//         name: "additionalPeople",
-//         message: "Would you like to add more team members?",
-//         default: 'Yes',
-//         choices: ["Yes","No"],
-//     }])
-//     .then(function() {
-//         if (additionalPeople === "Yes") {
-//             startApp();
-//         // } else {
-//             //generateFinalHTML();
-//         }
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     });
-// }
-
-
-
+function confirmation (){
+    inquirer.prompt([{
+        type: "list",
+        name: "additionalPeople",
+        message: "Would you like to add more team members?",
+        default: 'Yes',
+        choices: ["Yes","No"],
+    }])
+    .then(function({additionalPeople}) {
+        if (additionalPeople === "Yes") {
+            startApp();
+        // } else {
+            //generateFinalHTML();
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
 
 
 //HTML functions
@@ -146,11 +144,11 @@ function initialHTML () {
         <title>Team Members</title>
     </head>
     <body>
-        <nav class="navbar navbar-light .bg-danger">
+        <div class=" bg-danger mb-4 py-3 text-center">
             <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1 text-center">My Team</span>
+                <span class=" h1 text-center">My Team</span>
             </div>
-        </nav>
+        </div>
         <div class="container-fluid">
             <div class="row"> `;
     fs.writeFile("./dist/Teammates.html", html, function(err) {
@@ -173,18 +171,24 @@ function generateIndHTML (teamMember){
     let individualDetails = ""
     if (Role === "Manager") { 
             const OfficeNu = teamMember.getOfficeNumber();
-            individualDetails = `<div class="col-6">
-            <div class="card mx-auto mb-3" style="width: 18rem">
-            <h5 class="card-header">${Name}<br /><br />Manager</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${ID}</li>
-                <li class="list-group-item">Email Address: ${Email}</li>
-                <li class="list-group-item">Office Phone: ${OfficeNu}</li>
-            </ul>
-            </div>
-        </div>`
+            individualDetails = 
+            `
+            <div class="col-4">
+                <div class="bg-primary card mx-auto mb-3">
+                    <h5 class="card-header text-center">${Name}<br/>Manager</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">ID: ${ID}</li>
+                        <li class="list-group-item">Email Address: ${Email}</li>
+                        <li class="list-group-item">Office Phone: ${OfficeNu}</li>
+                    </ul>
+                </div>
+            </div>`
         }
-        fs.appendFile("./dist/team.html", individualDetails, function (err) {
+
+
+
+
+        fs.appendFile("./dist/Teammates.html", individualDetails, function (err) {
             if (err) {
                 return reject(err);
             };
