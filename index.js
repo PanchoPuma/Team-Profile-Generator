@@ -6,8 +6,55 @@ const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
 const teamMembers = [];
 
-//Role
-const Role = [
+
+//start 
+function startApp() {
+    return inquirer.prompt(Questions);
+};
+
+//Common questions
+
+const questions = [
+    {
+        type: 'input',
+        name: 'Name',
+        message: "Please enter the name of the employee (Required)",
+        validate: name => {
+            if (name) {
+                return true;
+            } else {
+                console.log('Please enter the name of the employee!');
+                return false;
+            }
+        }
+    
+    },
+    {
+        type: 'input',
+        name: 'ID',
+        message: "Please the employee's ID (Required)",
+        validate: employeeID => {
+            if (employeeID) {
+                return true;
+            } else {
+                console.log("Please the employee's IDD");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'Email',
+        message: "Please enter the  employees's email address (Required)",
+        validate: email => {
+            if (email) {
+                return true;
+            } else {
+                console.log("Please enter the  employees's email address");
+                return false;
+            }
+        }
+    },
     {
         type: 'list',
         name: 'Role',
@@ -25,244 +72,101 @@ const Role = [
 
 ]
 
-function specificQuestions({Role}) {
-    console.log(Role);
+function roleQuestions({Name, ID, Email,Role}) {
+    let roleVariable = "";
     if (Role === "Manager") {
-        managerInfo (Role);
+        roleVariable = 'Office Number';
     }else if (Role === "Engineer") {
-        engineerInfo (Role);
+        roleVariable = 'GitHub Username'
     }else if (Role === "Intern") {
-        internInfo (Role);
+        roleVariable = 'School'
     }
+    inquirer.prompt([{
+        message: `Enter team member's ${roleVariable}`,
+        name: "roleVariable"
+    },
+    {
+        type: "list",
+        name: "additionalPeople",
+        message: "Would you like to add more team members?",
+        choices: ["Yes","No"],
+    }])
+    .then(function({roleVariable, additionalPeople}) {
+        let newteamMember = '';
+        if (role === "Manager"){
+            newteamMember = new Manager(Name, ID, email, roleVariable);
+        } else if (role === "Intern") {
+            newteamMember = new Intern(Name, ID, email, roleVariable);
+        } else if (role === "Engineer") {
+            newteamMember = new Engineer(Name, ID, email, roleVariable);
+        }
+        teamMembers.push(newteamMember);
+        generateIndHTML(newteamMember)
+        .then(function() {
+            if (additionalPeople === "Yes") {
+                startApp();
+            } else {
+                generateFinalHTML();
+            }
+        });
+        
+    });
+}
+
+//HTML functions
+
+function initialHTML () {
+    const html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <title>Team Members</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-light .bg-danger">
+            <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1 text-center">My Team</span>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row"> `;
+    fs.writeFile("./dist/Teammates.html", html, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    console.log("start");
 };
-
-// Manager Info 
-function managerInfo (Role) {
-    inquirer.prompt([
-    {
-        type: 'input',
-        name: 'Name',
-        message: "Please enter the manager's name (Required)",
-        validate: name => {
-            if (name) {
-                return true;
-            } else {
-                console.log('Please enter the name of the manager!');
-                return false;
-            }
+function generateIndHTML (){
+    const Name = member.getName();
+        const ID = member.getID()
+        const Email = member.getEmail();
+        const Role = member.getRole();
+        if (Role === "Manager") { 
+            const officePhone = member.getOfficeNumber();
+            individualDetails = `<div class="col-6">
+            <div class="card mx-auto mb-3" style="width: 18rem">
+            <h5 class="card-header">${name}<br /><br />Manager</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${id}</li>
+                <li class="list-group-item">Email Address: ${email}</li>
+                <li class="list-group-item">Office Phone: ${officePhone}</li>
+            </ul>
+            </div>
+        </div>`
         }
-    
-    },
-    {
-        type: 'input',
-        name: 'ID',
-        message: "Please the enter manager's ID (Required)",
-        validate: employeeID => {
-            if (employeeID) {
-                return true;
-            } else {
-                console.log("Please the enter manager's ID");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'Email',
-        message: "Please enter the  manager's email address (Required)",
-        validate: email => {
-            if (email) {
-                return true;
-            } else {
-                console.log("Please enter the manager's email address");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'OfficeNu',
-        message: "Please enter the manager's office number (Required)",
-        validate: OfficeNu => {
-            if (OfficeNu) {
-                return true;
-            } else {
-                console.log("Please enter the manager's office number");
-                return false;
-            }
-        }
-    },
-    ])  
 
-    //add do you want to add an engineer or intern add if so return to menu otherwise run the rest
-}
-
-// function addNextConfirm (Name, ID, Email, X, Role){
-//     if (Role === "Manager") {
-//     newEmployee = new Manager (Name, ID, Email, X, Role);
-//     teamMembers.push(newEmployee);
-//     }
-// }
+} //different employee cards 
+generateFinalHTML(); //General outlook of the page  
 
 
-
-// {
-//     type: 'List',
-//     name: 'continuation',
-//     message: "Do you want to add another member?",
-//     choices: ['Yes', 'No'],
-//     validate: continuation => {
-//         if (continuation) {
-//             return true;
-//         } else {
-//             console.log("Do you want to add another member");
-//             return false;
-//         }
-//     } 
-// },
-
-
-
-
-
-
-
-
-
-
-// EngineerInfo 
-function engineerInfo (Role) {
-    inquirer.prompt([
-    {
-        type: 'input',
-        name: 'name',
-        message: "Please enter the Engineer's name (Required)",
-        validate: nameValue => {
-            if (nameValue) {
-                return true;
-            } else {
-                console.log('Please enter the name of the Engineer!');
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'ID',
-        message: "Please enter the Engineer's ID (Required)",
-        validate: employeeID => {
-            if (employeeID) {
-                return true;
-            } else {
-                console.log("Please enter Engineer's ID");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'Email',
-        message: "Please enter the Engineer's email address (Required)",
-        validate: email => {
-            if (email) {
-                return true;
-            } else {
-                console.log("Please enter the Engineer's email address");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'gitHub',
-        message: "Please enter the Engineer's GitHub username (Required)",
-        validate: gitHub => {
-            if (gitHub) {
-                return true;
-            } else {
-                console.log("Please enter the Engineer's GitHub username");
-                return false;
-            }
-        }
-    },
-    ])
-    newEmployee = new Engineer(name, ID, Email, Github, Role);
-    teamMembers.push(newEmployee);
-    //add add do you want to add a user, if so return to menu otherwise run the rest
-}
-
-//Intern Info
-function internInfo (Role) {
-    inquirer.prompt([
-    {
-        type: 'input',
-        name: 'name',
-        message: "Please enter the Intern's name (Required)",
-        validate: nameValue => {
-            if (nameValue) {
-                return true;
-            } else {
-                console.log('Please enter the name of the Intern!');
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'ID',
-        message: "Please enter the Intern's ID (Required)",
-        validate: employeeID => {
-            if (employeeID) {
-                return true;
-            } else {
-                console.log("Please enter the Intern's ID");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'Email',
-        message: "Please enter the Intern's email address (Required)",
-        validate: email => {
-            if (email) {
-                return true;
-            } else {
-                console.log("Please enter the Intern's email address");
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'School',
-        message: "Please enter the Intern's School (Required)",
-        validate: gitHub => {
-            if (gitHub) {
-                return true;
-            } else {
-                console.log("Please enter the Intern's School");
-                return false;
-            }
-        }
-    },
-    ])
-    newEmployee = new Intern(name, ID, Email, School, Role);
-    teamMembers.push(newEmployee);
-    //add add do you want to add a user, if so return to menu otherwise run the rest 
-}
-
-//generateIndHTML (); different employee cards 
-//generateHTML(); General outlook of the page  
-
-
-function startApp() {
-    return inquirer.prompt(Role);
-};
-
+initialHTML();
 startApp()
-    .then (Role => specificQuestions(Role))
-    .then 
+    .then (answers => roleQuestions(answers))
+    // .then 
     //.then (newEmployee => generateIndHTML(newEmployee))
     // then fs.writeFile general HTML
     .catch(err => {
