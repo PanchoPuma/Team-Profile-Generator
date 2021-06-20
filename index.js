@@ -4,9 +4,6 @@ const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
-const { Console } = require("console");
-const teamMembers = [];
-
 
 //start 
 function startApp() {
@@ -28,7 +25,6 @@ const questions = [
                 return false;
             }
         }
-    
     },
     {
         type: 'input',
@@ -38,7 +34,7 @@ const questions = [
             if (employeeID) {
                 return true;
             } else {
-                console.log("Please the employee's IDD");
+                console.log("Please the employee's ID");
                 return false;
             }
         }
@@ -90,16 +86,10 @@ function roleQuestions({Name, ID, Email, Role}) {
         let newteamMember = ""
         if (roleVariable === "Office Number"){
             newteamMember = new Manager(Name, ID, Email, uniqueRoleVariable);
-            teamMembers.push(newteamMember)
-            console.log (teamMembers)
         } else if (roleVariable === "School") {
             newteamMember = new Intern(Name, ID, Email, uniqueRoleVariable);
-            teamMembers.push(newteamMember)
-            console.log (teamMembers)
         } else if (roleVariable === "GitHub Username") {
             newteamMember = new Engineer(Name, ID, Email, uniqueRoleVariable );
-            teamMembers.push(newteamMember)
-            console.log (teamMembers)
         }
         generateIndHTML(newteamMember)
         confirmation ()
@@ -109,14 +99,14 @@ function roleQuestions({Name, ID, Email, Role}) {
     });
 }
 
-/// COnfirming whether 
+/// COnfirming whether to add more people
 
 function confirmation (){
     inquirer.prompt([{
         type: "list",
         name: "additionalPeople",
         message: "Would you like to add more team members?",
-        default: 'Yes',
+        default: 'No',
         choices: ["Yes","No"],
     }])
     .then(function({additionalPeople}) {
@@ -139,14 +129,19 @@ function confirmation (){
 //HTML functions
 
 function initialHTML () {
-    const html = `<!DOCTYPE html>
+    const tophtml = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <title>Team Members</title>
+        <!-- Bootstrap 5 -->
+        <link 
+        rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" 
+        crossorigin="anonymous">
+        <title>List of Team Members</title>
     </head>
     <body>
         <div class=" bg-danger mb-4 py-3 text-center">
@@ -156,7 +151,7 @@ function initialHTML () {
         </div>
         <div class="container-fluid">
             <div class="row"> `;
-    fs.writeFile("./dist/Teammates.html", html, function(err) {
+    fs.writeFile("./dist/Teammates.html", tophtml, function(err) {
         if (err) {
             console.log(err);
         }
@@ -169,7 +164,7 @@ function initialHTML () {
 function generateIndHTML (teamMember){
     return new Promise(function(resolve, reject) {
     const Name = teamMember.getName();
-    console.log (Name)
+    //console.log (Name)
     const ID = teamMember.getID()
     const Email = teamMember.getEmail();
     const Role = teamMember.getRole();
@@ -181,10 +176,10 @@ function generateIndHTML (teamMember){
             <div class="col-4">
                 <div class="bg-primary card mx-auto mb-3">
                     <h5 class="card-header text-center">${Name}<br/>Manager</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">ID: ${ID}</li>
-                        <li class="list-group-item">Email Address: ${Email}</li>
-                        <li class="list-group-item">Office Phone: ${OfficeNu}</li>
+                    <ul class="list-group ">
+                        <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
+                        <li class="list-group-item"><strong>Email Address:</strong> ${Email}</li>
+                        <li class="list-group-item"><strong>Office Phone:</strong> ${OfficeNu}</li>
                     </ul>
                 </div>
             </div>`
@@ -195,10 +190,10 @@ function generateIndHTML (teamMember){
             <div class="col-4">
                 <div class="bg-primary card mx-auto mb-3">
                     <h5 class="card-header text-center">${Name}<br/>Engineer</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">ID: ${ID}</li>
-                        <li class="list-group-item">Email Address: ${Email}</li>
-                        <li class="list-group-item">Office Phone: ${Github}</li>
+                    <ul class="list-group ">
+                        <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
+                        <li class="list-group-item"><strong>Email Address:</strong> ${Email}</li>
+                        <li class="list-group-item"><strong>Github:</strong> ${Github}</li>
                     </ul>
                 </div>
             </div>`
@@ -209,10 +204,10 @@ function generateIndHTML (teamMember){
             <div class="col-4">
                 <div class="bg-primary card mx-auto mb-3">
                     <h5 class="card-header text-center">${Name}<br/>Intern</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">ID: ${ID}</li>
-                        <li class="list-group-item">Email Address: ${Email}</li>
-                        <li class="list-group-item">Office Phone: ${School}</li>
+                    <ul class="list-group ">
+                        <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
+                        <li class="list-group-item"><strong>Email Address: </strong> ${Email}</li>
+                        <li class="list-group-item"><strong>School: </strong> ${School}</li>
                     </ul>
                 </div>
             </div>`
@@ -230,7 +225,7 @@ function generateIndHTML (teamMember){
 
 function generateFinalHTML(){
     const finalHTML = ` 
-    </div>
+        </div>
     </div>
 </body>
 </html>`;

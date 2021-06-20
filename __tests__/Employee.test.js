@@ -2,7 +2,7 @@ const Employee = require("../lib/Employee");
 
 test("Set the name, ID and email via the arguments", () => {
     const eTest = new Employee ('Fran', '01','fran@email.com');
-    expect(eTest.name).toBe('Fran');
+    expect(eTest.Name).toBe('Fran');
     expect(eTest.ID).toBe('01');
     expect(eTest.Email).toBe('fran@email.com');
 });
