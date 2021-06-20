@@ -121,7 +121,11 @@ function confirmation (){
     }])
     .then(function({additionalPeople}) {
         if (additionalPeople === "Yes") {
-            startApp();
+            startApp()
+            .then (answers => roleQuestions(answers))
+            .catch(err => {
+            console.log(err);
+    });;
         } else {
             generateFinalHTML();
         }
@@ -225,7 +229,8 @@ function generateIndHTML (teamMember){
 //Final outlook of the page  
 
 function generateFinalHTML(){
-    const finalHTML = ` </div>
+    const finalHTML = ` 
+    </div>
     </div>
 </body>
 </html>`;
@@ -248,3 +253,5 @@ startApp()
     .catch(err => {
         console.log(err);
     });
+
+    
