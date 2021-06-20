@@ -4,6 +4,7 @@ const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
+const { Console } = require("console");
 const teamMembers = [];
 
 
@@ -121,8 +122,8 @@ function confirmation (){
     .then(function({additionalPeople}) {
         if (additionalPeople === "Yes") {
             startApp();
-        // } else {
-            //generateFinalHTML();
+        } else {
+            generateFinalHTML();
         }
     })
     .catch(err => {
@@ -183,11 +184,35 @@ function generateIndHTML (teamMember){
                     </ul>
                 </div>
             </div>`
+        } else if (Role === "Engineer") { 
+            const Github = teamMember.getGithub();
+            individualDetails = 
+            `
+            <div class="col-4">
+                <div class="bg-primary card mx-auto mb-3">
+                    <h5 class="card-header text-center">${Name}<br/>Engineer</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">ID: ${ID}</li>
+                        <li class="list-group-item">Email Address: ${Email}</li>
+                        <li class="list-group-item">Office Phone: ${Github}</li>
+                    </ul>
+                </div>
+            </div>`
+        } else if (Role === "Intern") { 
+            const School = teamMember.getSchool();
+            individualDetails = 
+            `
+            <div class="col-4">
+                <div class="bg-primary card mx-auto mb-3">
+                    <h5 class="card-header text-center">${Name}<br/>Intern</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">ID: ${ID}</li>
+                        <li class="list-group-item">Email Address: ${Email}</li>
+                        <li class="list-group-item">Office Phone: ${School}</li>
+                    </ul>
+                </div>
+            </div>`
         }
-
-
-
-
         fs.appendFile("./dist/Teammates.html", individualDetails, function (err) {
             if (err) {
                 return reject(err);
@@ -196,7 +221,22 @@ function generateIndHTML (teamMember){
         });
     });
 } 
-//generateFinalHTML(); //General outlook of the page  
+
+//Final outlook of the page  
+
+function generateFinalHTML(){
+    const finalHTML = ` </div>
+    </div>
+</body>
+</html>`;
+
+    fs.appendFile("./dist/Teammates.html", finalHTML, function (err) {
+        if (err) {
+            console.log(err);
+        };
+    });
+console.log("You are all set")
+};
 
 
 initialHTML();
