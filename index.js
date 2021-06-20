@@ -9,7 +9,7 @@ const teamMembers = [];
 
 //start 
 function startApp() {
-    return inquirer.prompt(Questions);
+    return inquirer.prompt(questions);
 };
 
 //Common questions
@@ -72,7 +72,7 @@ const questions = [
 
 ]
 
-function roleQuestions({Name, ID, Email,Role}) {
+function roleQuestions({Name, ID, Email, Role}) {
     let roleVariable = "";
     if (Role === "Manager") {
         roleVariable = 'Office Number';
@@ -83,35 +83,55 @@ function roleQuestions({Name, ID, Email,Role}) {
     }
     inquirer.prompt([{
         message: `Enter team member's ${roleVariable}`,
-        name: "roleVariable"
-    },
-    {
-        type: "list",
-        name: "additionalPeople",
-        message: "Would you like to add more team members?",
-        choices: ["Yes","No"],
+        name: "uniqueRoleVariable"
     }])
-    .then(function({roleVariable, additionalPeople}) {
-        let newteamMember = '';
-        if (role === "Manager"){
-            newteamMember = new Manager(Name, ID, email, roleVariable);
-        } else if (role === "Intern") {
-            newteamMember = new Intern(Name, ID, email, roleVariable);
-        } else if (role === "Engineer") {
-            newteamMember = new Engineer(Name, ID, email, roleVariable);
+    .then(function({uniqueRoleVariable}) {
+        let newteamMember = ""
+        if (roleVariable === "Office Number"){
+            newteamMember = new Manager(Name, ID, Email, uniqueRoleVariable);
+            teamMembers.push(newteamMember)
+            console.log (teamMembers)
+        } else if (roleVariable === "School") {
+            newteamMember = new Intern(Name, ID, Email, uniqueRoleVariable);
+            teamMembers.push(newteamMember)
+            console.log (teamMembers)
+        } else if (roleVariable === "GitHub Username") {
+            newteamMember = new Engineer(Name, ID, Email, uniqueRoleVariable );
+            teamMembers.push(newteamMember)
+            console.log (teamMembers)
         }
-        teamMembers.push(newteamMember);
-        generateIndHTML(newteamMember)
-        .then(function() {
-            if (additionalPeople === "Yes") {
-                startApp();
-            } else {
-                generateFinalHTML();
-            }
-        });
-        
+        //generateIndHTML(newteamMember)
+    })
+    .catch(err => {
+        console.log(err);
     });
 }
+
+/// COnfirming whether 
+
+// function confirmation (){
+//     inquirer.prompt([{
+//         type: "list",
+//         name: "additionalPeople",
+//         message: "Would you like to add more team members?",
+//         default: 'Yes',
+//         choices: ["Yes","No"],
+//     }])
+//     .then(function() {
+//         if (additionalPeople === "Yes") {
+//             startApp();
+//         // } else {
+//             //generateFinalHTML();
+//         }
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
+// }
+
+
+
+
 
 //HTML functions
 
@@ -140,34 +160,46 @@ function initialHTML () {
     });
     console.log("start");
 };
-function generateIndHTML (){
-    const Name = member.getName();
-        const ID = member.getID()
-        const Email = member.getEmail();
-        const Role = member.getRole();
-        if (Role === "Manager") { 
-            const officePhone = member.getOfficeNumber();
+
+//different employee cards 
+
+function generateIndHTML (teamMember){
+    return new Promise(function(resolve, reject) {
+    const Name = teamMember.getName();
+    console.log (Name)
+    const ID = teamMember.getID()
+    const Email = teamMember.getEmail();
+    const Role = teamMember.getRole();
+    let individualDetails = ""
+    if (Role === "Manager") { 
+            const OfficeNu = teamMember.getOfficeNumber();
             individualDetails = `<div class="col-6">
             <div class="card mx-auto mb-3" style="width: 18rem">
-            <h5 class="card-header">${name}<br /><br />Manager</h5>
+            <h5 class="card-header">${Name}<br /><br />Manager</h5>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${id}</li>
-                <li class="list-group-item">Email Address: ${email}</li>
-                <li class="list-group-item">Office Phone: ${officePhone}</li>
+                <li class="list-group-item">ID: ${ID}</li>
+                <li class="list-group-item">Email Address: ${Email}</li>
+                <li class="list-group-item">Office Phone: ${OfficeNu}</li>
             </ul>
             </div>
         </div>`
         }
-
-} //different employee cards 
-generateFinalHTML(); //General outlook of the page  
+        fs.appendFile("./dist/team.html", individualDetails, function (err) {
+            if (err) {
+                return reject(err);
+            };
+            return resolve();
+        });
+    });
+} 
+//generateFinalHTML(); //General outlook of the page  
 
 
 initialHTML();
 startApp()
     .then (answers => roleQuestions(answers))
-    // .then 
-    //.then (newEmployee => generateIndHTML(newEmployee))
+    //.then (() => confirmation())
+    //.then (newteamMember => generateIndHTML(newteamMember))
     // then fs.writeFile general HTML
     .catch(err => {
         console.log(err);
