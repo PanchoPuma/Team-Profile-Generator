@@ -1,9 +1,9 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const Employee = require("./lib/Employee");
-//const Engineer = require("./lib/Engineer");
-//const Intern = require("./lib/Intern");
-//const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const Manager = require("./lib/Manager");
 const teamMembers = [];
 
 //Role
@@ -43,14 +43,15 @@ function managerInfo (Role) {
         type: 'input',
         name: 'Name',
         message: "Please enter the manager's name (Required)",
-        validate: nameValue => {
-            if (nameValue) {
+        validate: name => {
+            if (name) {
                 return true;
             } else {
                 console.log('Please enter the name of the manager!');
                 return false;
             }
         }
+    
     },
     {
         type: 'input',
@@ -91,18 +92,50 @@ function managerInfo (Role) {
             }
         }
     },
-    //newEmployee = new Manager(Name, ID, Email, Office, Role);
-    //teamMembers.push(newEmployee);
+    ])  
+
     //add do you want to add an engineer or intern add if so return to menu otherwise run the rest
-    ])
 }
+
+// function addNextConfirm (Name, ID, Email, X, Role){
+//     if (Role === "Manager") {
+//     newEmployee = new Manager (Name, ID, Email, X, Role);
+//     teamMembers.push(newEmployee);
+//     }
+// }
+
+
+
+// {
+//     type: 'List',
+//     name: 'continuation',
+//     message: "Do you want to add another member?",
+//     choices: ['Yes', 'No'],
+//     validate: continuation => {
+//         if (continuation) {
+//             return true;
+//         } else {
+//             console.log("Do you want to add another member");
+//             return false;
+//         }
+//     } 
+// },
+
+
+
+
+
+
+
+
+
 
 // EngineerInfo 
 function engineerInfo (Role) {
     inquirer.prompt([
     {
         type: 'input',
-        name: 'Name',
+        name: 'name',
         message: "Please enter the Engineer's name (Required)",
         validate: nameValue => {
             if (nameValue) {
@@ -153,8 +186,8 @@ function engineerInfo (Role) {
         }
     },
     ])
-    //newEmployee = new Engineer(Name, ID, Email, Github, Role);
-    //teamMembers.push(newEmployee);
+    newEmployee = new Engineer(name, ID, Email, Github, Role);
+    teamMembers.push(newEmployee);
     //add add do you want to add a user, if so return to menu otherwise run the rest
 }
 
@@ -163,7 +196,7 @@ function internInfo (Role) {
     inquirer.prompt([
     {
         type: 'input',
-        name: 'Name',
+        name: 'name',
         message: "Please enter the Intern's name (Required)",
         validate: nameValue => {
             if (nameValue) {
@@ -214,8 +247,8 @@ function internInfo (Role) {
         }
     },
     ])
-    //newEmployee = new Intern(Name, ID, Email, School, Role);
-    //teamMembers.push(newEmployee);
+    newEmployee = new Intern(name, ID, Email, School, Role);
+    teamMembers.push(newEmployee);
     //add add do you want to add a user, if so return to menu otherwise run the rest 
 }
 
@@ -229,5 +262,9 @@ function startApp() {
 
 startApp()
     .then (Role => specificQuestions(Role))
+    .then 
     //.then (newEmployee => generateIndHTML(newEmployee))
     // then fs.writeFile general HTML
+    .catch(err => {
+        console.log(err);
+    });
