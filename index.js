@@ -149,7 +149,7 @@ function initialHTML () {
                 <span class=" h1 text-center">My Team</span>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" style=" padding-left: 90px; padding-right: 90px; padding-top: 20px;">
             <div class="row"> `;
     fs.writeFile("./dist/Teammates.html", tophtml, function(err) {
         if (err) {
@@ -178,7 +178,7 @@ function generateIndHTML (teamMember){
                     <h5 class="card-header text-center">${Name}<br/>Manager</h5>
                     <ul class="list-group ">
                         <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
-                        <li class="list-group-item"><strong>Email Address:</strong> ${Email}</li>
+                        <li class="list-group-item"><strong>Email Address:</strong> <a href="mailto:${Email}">${Email}</a> </li>
                         <li class="list-group-item"><strong>Office Phone:</strong> ${OfficeNu}</li>
                     </ul>
                 </div>
@@ -192,8 +192,8 @@ function generateIndHTML (teamMember){
                     <h5 class="card-header text-center">${Name}<br/>Engineer</h5>
                     <ul class="list-group ">
                         <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
-                        <li class="list-group-item"><strong>Email Address:</strong> ${Email}</li>
-                        <li class="list-group-item"><strong>Github:</strong> ${Github}</li>
+                        <li class="list-group-item"><strong>Email Address:</strong> <a href="mailto:${Email}">${Email} </a> </li>
+                        <li class="list-group-item"><strong>Github:</strong> <a href="https://github.com/${Github}">${Github} </a></li>
                     </ul>
                 </div>
             </div>`
@@ -206,7 +206,7 @@ function generateIndHTML (teamMember){
                     <h5 class="card-header text-center">${Name}<br/>Intern</h5>
                     <ul class="list-group ">
                         <li class="list-group-item"><strong>ID:</strong> ${ID}</li>
-                        <li class="list-group-item"><strong>Email Address: </strong> ${Email}</li>
+                        <li class="list-group-item"><strong>Email Address: </strong> <a href="mailto:${Email}">${Email}</a> </li>
                         <li class="list-group-item"><strong>School: </strong> ${School}</li>
                     </ul>
                 </div>
