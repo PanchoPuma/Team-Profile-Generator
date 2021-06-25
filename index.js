@@ -156,7 +156,6 @@ function initialHTML () {
             console.log(err);
         }
     });
-    console.log("start");
 };
 
 //different employee cards 
@@ -235,7 +234,7 @@ function generateFinalHTML(){
             console.log(err);
         };
     });
-console.log("You are all set")
+console.log("You are all set! Check the dist folder")
 };
 
 
